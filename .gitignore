@@ -1,0 +1,40 @@
+# Secrets and Environment Variables
+.env
+
+# Python Virtual Environments
+venv/
+.venv/
+env/
+*.env
+
+# Python Artifacts and Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Databases and Local Memory
+# We ignore these so each user/environment starts with a fresh memory
+*.db
+*.sqlite
+aide_memory.db
+
+# IDE and Editor Specifics
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Streamlit Configuration
+.streamlit/
+
+# Logs and Temporary Testing Files
+*.log
+test_error.py
+test_syntax.py
+
+# OS Metadata
+.DS_Store
+Thumbs.db
