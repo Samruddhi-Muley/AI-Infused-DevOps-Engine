@@ -18,11 +18,15 @@ jobs:
       - name: Install AIDE dependencies
         run: pip install -r requirements.txt
 
-      - name: Run your build/test and capture log
+      - name: Run test pipeline and capture log
         id: build
         run: |
-          python your_script.py > build.log 2>&1
+          python test_pipeline.py > build.log 2>&1
         continue-on-error: true
+
+      - name: Show build log
+        if: steps.build.outcome == 'failure'
+        run: cat build.log
 
       - name: Run AIDE if build failed
         if: steps.build.outcome == 'failure'
@@ -34,4 +38,4 @@ jobs:
       - name: Retry build after AIDE fix
         if: steps.build.outcome == 'failure'
         run: |
-          python your_script.py
+          python test_pipeline.py
