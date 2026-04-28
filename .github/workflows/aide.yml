@@ -1,0 +1,37 @@
+name: CI with AIDE Self-Healing
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install AIDE dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run your build/test and capture log
+        id: build
+        run: |
+          python your_script.py > build.log 2>&1
+        continue-on-error: true
+
+      - name: Run AIDE if build failed
+        if: steps.build.outcome == 'failure'
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          python aide_runner.py build.log
+
+      - name: Retry build after AIDE fix
+        if: steps.build.outcome == 'failure'
+        run: |
+          python your_script.py
